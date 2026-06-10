@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cryptographic Hash Toolset</title>
+    <!-- Tailwind CSS Activatum -->
+    <link rel="stylesheet" href="./output.css" />
+  </head>
+  <body class="bg-white text-slate-700 min-h-screen flex flex-col font-sans">
+    <!-- Minimal Top Navigation -->
+    <header
+      class="border-b border-slate-200 px-8 py-4 flex justify-between items-center"
+    >
+      <h1 class="text-xl font-bold text-blue-900 flex items-center gap-2">
+        <span class="text-blue-700">#</span> HashEngine
+      </h1>
+    </header>
+
+    <!-- Central Layout Container -->
+    <main class="flex-1 max-w-5xl w-full mx-auto my-12 px-6">
+      <!-- Hero Header -->
+      <div class="text-center mb-10">
+        <h2 class="text-2xl font-bold text-slate-800">
+          Deterministic Text Hashing
+        </h2>
+        <p class="text-slate-500 mt-2">
+          Transform plain-text inputs instantly into fixed cryptographic hash
+          structures.
+        </p>
+      </div>
+
+      <!-- Workspace Dashboard Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Input Component Section (Medium Grey Card) -->
+        <section
+          class="bg-slate-100 border border-slate-200 rounded-xl p-6 flex flex-col gap-4"
+        >
+          <div
+            class="text-xs uppercase tracking-wider text-slate-500 font-semibold"
+          >
+            1. Plain Text Input
+          </div>
+
+          <textarea
+            id="text-input"
+            placeholder="Type or paste your string content here..."
+            class="w-full min-h-[150px] border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white resize-y outline-none focus:border-blue-900 transition-colors font-mono"
+          ></textarea>
+
+          <div class="flex flex-col gap-2">
+            <label
+              for="algorithm-select"
+              class="text-xs uppercase tracking-wider text-slate-500 font-semibold"
+            >
+              Select Algorithm
+            </label>
+            <select
+              id="algorithm-select"
+              class="w-full border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white outline-none focus:border-blue-900 transition-colors"
+            >
+              <option value="none">NONE</option>
+              <option value="sha256">SHA-256</option>
+              <option value="sha1">SHA-1</option>
+              <option value="md5">MD5</option>
+            </select>
+          </div>
+
+          <!-- Dark Blue Action Button -->
+          <button
+            id="hash-trigger"
+            class="bg-blue-900 hover:bg-blue-950 text-white font-semibold rounded-lg p-3.5 text-base transition-colors w-full cursor-pointer"
+          >
+            Generate Secure Hash
+          </button>
+        </section>
+
+        <!-- Output Component Section (Medium Grey Card) -->
+        <section
+          class="bg-slate-100 border border-slate-200 rounded-xl p-6 flex flex-col gap-4"
+        >
+          <div
+            class="text-xs uppercase tracking-wider text-slate-500 font-semibold"
+          >
+            2. Hashed Output
+          </div>
+
+          <div class="relative flex-1 flex flex-col">
+            <div
+              id="text-output"
+              class="bg-white border border-slate-200 rounded-lg p-4 min-h-[150px] md:h-full word-all font-mono text-sm text-blue-900 break-all"
+            >
+              <span class="text-slate-400 italic"
+                >Your generated hash string will appear here...</span
+              >
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script>
+      document
+        .getElementById("hash-trigger")
+        .addEventListener("click", async () => {
+          const text_input = document.getElementById("text-input").value;
+          const algorithm_select =
+            document.getElementById("algorithm-select").value;
+          const text_output = document.getElementById("text-output");
+
+          if (algorithm_select === "none") {
+            return (text_output.innerHTML =
+              '<span class="text-red-500">Please provide an algorithm type.</span>');
+          }
+
+          if (!text_input) {
+            return (text_output.innerHTML =
+              '<span class="text-red-500">Please provide a text input.</span>');
+          }
+
+          text_output.innerHTML =
+            '<span class="text-slate-400 animate-pulse">Processing...</span>';
+
+          try {
+            const res = await fetch("http://localhost:9000/api/hash", {
+              method: "POST",
+
+              headers: {
+                "Content-Type": "application/json",
+              },
+
+              body: JSON.stringify({
+                text: text_input,
+                algorithm: algorithm_select,
+              }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+              text_output.innerHTML = `<span class="text-blue-900 font-bold break-all">${data.hash}</span>`;
+            } else {
+              text_output.innerHTML = `<span class="text-red-500">Backend Error:${data.error}</span>`;
+            }
+          } catch (error) {
+            console.error(error);
+            text_output.innerHTML =
+              '<span class = "text-red-500">Connection Failed: Server is off</span>' +
+              error;
+            return;
+          }
+        });
+    </script>
+
+    <!-- Notice: JavaScript contains absolutely no network/fetch code. Purely static placeholders. -->
+    <!-- <script>
+    document.getElementById('hash-trigger').addEventListener('click', () => {
+      const inputVal = document.getElementById('text-input').value;
+      const outputBox = document.getElementById('text-output');
+      
+      if (!inputVal) {
+        outputBox.innerHTML = '<span class="text-red-500">Please provide a plain text input.</span>';
+        return;
+      }
+      
+      outputBox.innerHTML = '<span class="text-slate-500 italic">Ready to link. Waiting for our backend connection logic...</span>';
+    });
+  </script> -->
+  </body>
+</html>
