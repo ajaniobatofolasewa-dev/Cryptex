@@ -40,6 +40,38 @@ app.post("/api/hash", (req, res) => {
   }
 });
 
+app.post("/api/verify", (req, res) => {
+  const { text, expectedHash, algorithmProvided } = req.body;
+
+  try {
+    if (!text || !expectedHash || !algorithmProvided) {
+      return res
+        .status(400)
+        .json({ error: "fields are empty or algorithm not selected" });
+    }
+
+    const validAlgos = ["sha256", "sha1", "md5"];
+    if (!validAlgos.includes(algorithmProvided.toLowerCase())) {
+      return res
+        .status(400)
+        .json({ error: "Unsupported or invalid algorithm selected." });
+    }
+
+    const rawText_toHash = crypto
+      .createHash(algorithmProvided)
+      .update(text)
+      .digest("hex");
+
+    if (rawText_toHash !== expectedHash) {
+      return res.json({ match: false });
+    }
+
+    return res.json({ match: true });
+  } catch (error) {
+    console.error("Backend processing error: " + error);
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Backend active on server http://localhost:${PORT}`);
 });

@@ -59,7 +59,7 @@
               id="algorithm-select"
               class="w-full border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white outline-none focus:border-blue-900 transition-colors"
             >
-              <option value="none">NONE</option>
+              <option value="none">PICK AN ALGORITHM</option>
               <option value="sha256">SHA-256</option>
               <option value="sha1">SHA-1</option>
               <option value="md5">MD5</option>
@@ -73,6 +73,14 @@
           >
             Generate Secure Hash
           </button>
+
+          <!-- I would come back here to make the user to be able to generate thier own key with thier own words -->
+          <!-- <button
+            id="hash-key"
+            class="bg-blue-900 hover:bg-blue-950 text-white font-semibold rounded-lg p-3.5 text-base transition-colors w-full cursor-pointer"
+          >
+            Generate Key
+          </button> -->
         </section>
 
         <!-- Output Component Section (Medium Grey Card) -->
@@ -91,12 +99,96 @@
               class="bg-white border border-slate-200 rounded-lg p-4 min-h-[150px] md:h-full word-all font-mono text-sm text-blue-900 break-all"
             >
               <span class="text-slate-400 italic"
-                >Your generated hash string will appear here...</span
+                >Your generated hash will appear here...</span
               >
             </div>
+
+            <!-- <div
+              id="key"
+              class="bg-white border border-slate-200 rounded-lg p-4 min-h-[50px] word-all font-mono text-sm text-blue-900 break-all"
+            >
+              <span class="text-slate-400 italic"
+                >Your key will appear here...</span
+              >
+            </div> -->
           </div>
         </section>
       </div>
+
+      <!-- Data Integrity Verification Card -->
+      <section
+        class="mt-8 bg-slate-100 border border-slate-200 rounded-xl p-6 flex flex-col gap-4 max-w-2xl mx-auto"
+      >
+        <div
+          class="text-xs uppercase tracking-wider text-slate-500 font-semibold"
+        >
+          Verify File/Text Integrity
+        </div>
+
+        <!-- Input Field 1: The Raw Source Content -->
+        <div class="flex flex-col gap-2">
+          <label class="text-xs text-slate-500 font-medium"
+            >1. Paste Original Text to Check</label
+          >
+          <textarea
+            id="verify-text-input"
+            placeholder="Type or paste the raw content you want to verify..."
+            class="w-full min-h-[100px] border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white resize-y outline-none focus:border-blue-900 transition-colors font-mono"
+          ></textarea>
+        </div>
+
+        <!-- Input Field 2: The Expected Target Hash String -->
+        <div class="flex flex-col gap-2">
+          <label class="text-xs text-slate-500 font-medium"
+            >2. Paste Expected Hash Signature</label
+          >
+          <input
+            type="text"
+            id="verify-hash-signature"
+            placeholder="Paste the official hash string here (e.g. 2cf24dba...)"
+            class="w-full border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white outline-none focus:border-blue-900 transition-colors font-mono"
+          />
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label
+            for="algorithm-select"
+            class="text-xs uppercase tracking-wider text-slate-500 font-semibold"
+          >
+            Select Algorithm
+          </label>
+          <select
+            id="algorithm-select-s"
+            class="w-full border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white outline-none focus:border-blue-900 transition-colors"
+          >
+            -
+            <option value="none">
+              SELECT THE ALGORITHM TYPE GIVEN BY THE SOFTWARE PRODUCER
+            </option>
+            <option value="sha256">SHA-256</option>
+            <option value="sha1">SHA-1</option>
+            <option value="md5">MD5</option>
+          </select>
+        </div>
+
+        <!-- Action Button & Output Readout Line -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center mt-2">
+          <button
+            id="verify-trigger"
+            class="bg-blue-900 hover:bg-blue-950 text-white font-semibold rounded-lg p-3 text-base transition-colors w-full cursor-pointer"
+          >
+            Verify Integrity Match
+          </button>
+
+          <!-- Dynamic Alert Readout Area -->
+          <div
+            id="verify-status-output"
+            class="border border-slate-200 bg-white rounded-lg p-3 text-center font-medium text-sm text-slate-400 min-h-[48px] flex items-center justify-center"
+          >
+            Awaiting verification inputs...
+          </div>
+        </div>
+      </section>
     </main>
 
     <script>
@@ -150,21 +242,63 @@
             return;
           }
         });
-    </script>
 
-    <!-- Notice: JavaScript contains absolutely no network/fetch code. Purely static placeholders. -->
-    <!-- <script>
-    document.getElementById('hash-trigger').addEventListener('click', () => {
-      const inputVal = document.getElementById('text-input').value;
-      const outputBox = document.getElementById('text-output');
-      
-      if (!inputVal) {
-        outputBox.innerHTML = '<span class="text-red-500">Please provide a plain text input.</span>';
-        return;
-      }
-      
-      outputBox.innerHTML = '<span class="text-slate-500 italic">Ready to link. Waiting for our backend connection logic...</span>';
-    });
-  </script> -->
+      document
+        .getElementById("verify-trigger")
+        .addEventListener("click", async () => {
+          const vti = document.getElementById("verify-text-input").value;
+          const vhs = document.getElementById("verify-hash-signature").value;
+          const algorSel = document.getElementById("algorithm-select-s").value;
+          const vso = document.getElementById("verify-status-output");
+
+          if (!vti || !vhs) {
+            vso.innerHTML =
+              '<span class="text-red-500">Provide atext or a file for me to verify.</span>';
+            return;
+          }
+
+          if (!algorSel) {
+            vso.innerHTML =
+              '<span class="text-red-500">Please select the algorithm type provided by the software producer</span>';
+          }
+
+          vso.innerHTML =
+            '<span class="text-slate-400 animate-pulse">Running verification math...</span>';
+
+          try {
+            const res = await fetch("http://localhost:9000/api/verify", {
+              method: "POST",
+
+              headers: {
+                "Content-Type": "application/json",
+              },
+
+              body: JSON.stringify({
+                text: vti,
+                expectedHash: vhs,
+                algorithmProvided: algorSel,
+              }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+              if (data.match === true) {
+                vso.innerHTML =
+                  '<span class="text-green-600 font-bold">✓ INTEGRITY MATCH: Text matches perfectly!</span>';
+              } else {
+                vso.innerHTML =
+                  '<span class="text-red-500 font-bold">✗ WARNING: Hash signature does not match!</span>';
+              }
+            } else {
+              vso.innerHTML = `<span class="text-red-500">Error: ${data.error}</span>`;
+            }
+          } catch (error) {
+            console.error(error + " verifying error");
+            vso.innerHTML =
+              '<span class="text-red-500">Server Error: Failed to verify content.</span>';
+          }
+        });
+    </script>
   </body>
 </html>
