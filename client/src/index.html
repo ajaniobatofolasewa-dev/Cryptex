@@ -7,46 +7,265 @@
     <!-- Tailwind CSS Activatum -->
     <link rel="stylesheet" href="./output.css" />
   </head>
-  <body class="bg-white text-slate-700 min-h-screen flex flex-col font-sans">
-    <!-- Minimal Top Navigation -->
-    <header
-      class="border-b border-slate-200 px-8 py-4 flex justify-between items-center"
+  <body class="bg-white text-slate-700 min-h-screen flex font-sans">
+    <!-- LEFT PANEL: The Professional Sidebar Navigation -->
+    <aside
+      class="w-64 bg-slate-100 border-r border-slate-200 flex flex-col p-6 gap-6"
     >
       <h1 class="text-xl font-bold text-blue-900 flex items-center gap-2">
         <span class="text-blue-700">#</span> HashEngine
       </h1>
-    </header>
 
-    <!-- Central Layout Container -->
-    <main class="flex-1 max-w-5xl w-full mx-auto my-12 px-6">
-      <!-- Hero Header -->
-      <div class="text-center mb-10">
-        <h2 class="text-2xl font-bold text-slate-800">
-          Deterministic Text Hashing
-        </h2>
-        <p class="text-slate-500 mt-2">
-          Transform plain-text inputs instantly into fixed cryptographic hash
-          structures.
-        </p>
+      <nav class="flex flex-col gap-2">
+        <!-- Nav Button 1 -->
+        <button
+          id="nav-hash"
+          class="w-full text-left font-semibold text-sm px-4 py-3 rounded-lg bg-blue-900 text-white transition-colors cursor-pointer"
+        >
+          📁 Text Hashing
+        </button>
+
+        <!-- Nav Button 2 -->
+        <button
+          id="nav-verify"
+          class="w-full text-left font-semibold text-sm px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
+        >
+          🔍 File/Text Verification
+        </button>
+
+        <!-- Nav Button 3 (Placeholder for Encryption/Decryption later) -->
+        <button
+          id="nav-cipher"
+          class="w-full text-left font-semibold text-sm px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer"
+        >
+          🔒 Cipher Secret Lock
+        </button>
+      </nav>
+    </aside>
+
+    <!-- RIGHT PANEL: The Content Workspace viewport -->
+    <main class="flex-1 p-12 max-w-6xl mx-auto">
+      <!-- FEATURE MODULE 1: TEXT HASHING WORKSPACE -->
+      <!-- FEATURE MODULE 1: TEXT HASHING WORKSPACE -->
+      <div id="panel-hash-workspace" class="block">
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-slate-800">
+            Deterministic Text Hashing
+          </h2>
+          <p class="text-slate-500 mt-1">
+            Transform raw text or local documents instantly into secure string
+            footprints.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- LEFT PANEL: INPUT GENERATOR SECTION (Medium Grey Card) -->
+          <section
+            class="bg-slate-100 border border-slate-200 rounded-xl p-6 flex flex-col gap-4"
+          >
+            <div
+              class="text-xs uppercase tracking-wider text-slate-500 font-semibold"
+            >
+              1. Select Input Source
+            </div>
+
+            <!-- Sub-Toggle Selection Switch -->
+            <div class="flex gap-2 p-1 bg-slate-200 rounded-lg w-fit">
+              <button
+                id="toggle-input-text"
+                type="button"
+                class="text-xs font-bold px-3 py-1.5 rounded-md bg-white text-blue-900 shadow-sm transition-all cursor-pointer"
+              >
+                Text Input
+              </button>
+              <button
+                id="toggle-input-file"
+                type="button"
+                class="text-xs font-bold px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
+              >
+                File Input
+              </button>
+            </div>
+
+            <!-- CONTAINER A: Plain Text Input Area (Visible by default) -->
+            <div id="hash-text-container" class="block">
+              <textarea
+                id="text-input"
+                placeholder="Type or paste your string content here..."
+                class="w-full min-h-[150px] border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white resize-y outline-none focus:border-blue-900 transition-colors font-mono"
+              ></textarea>
+            </div>
+
+            <!-- CONTAINER B: File Upload Area (Hidden by default) -->
+            <div id="hash-file-container" class="hidden">
+              <div
+                id="hash-drop-zone"
+                class="w-full border-2 border-dashed border-slate-300 rounded-xl p-8 bg-white hover:bg-slate-50 hover:border-blue-900 transition-all flex flex-col items-center justify-center gap-2 cursor-pointer group"
+              >
+                <span
+                  class="text-3xl group-hover:scale-110 transition-transform"
+                  >📁</span
+                >
+                <p class="text-sm font-semibold text-slate-700 text-center">
+                  Drag & drop file to hash, or
+                  <span class="text-blue-900 underline">browse</span>
+                </p>
+                <p
+                  id="hash-file-details"
+                  class="text-xs text-slate-400 text-center italic"
+                >
+                  Supports any file format up to 50MB
+                </p>
+                <input type="file" id="hash-hidden-file-input" class="hidden" />
+              </div>
+            </div>
+
+            <!-- SHARED SELECTION AREA: Stays completely visible for both text and files -->
+            <div class="flex flex-col gap-2 mt-2">
+              <label
+                for="algorithm-select"
+                class="text-xs uppercase tracking-wider text-slate-500 font-semibold"
+              >
+                Select Algorithm
+              </label>
+              <select
+                id="algorithm-select"
+                class="w-full border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white outline-none focus:border-blue-900 transition-colors"
+              >
+                <option value="none">-- Select Hashing Format --</option>
+                <option value="sha256">SHA-256</option>
+                <option value="sha1">SHA-1</option>
+                <option value="md5">MD5</option>
+              </select>
+            </div>
+
+            <!-- SHARED ACTION BUTTON -->
+            <button
+              id="hash-trigger"
+              class="bg-blue-900 hover:bg-blue-950 text-white font-semibold rounded-lg p-3.5 text-base transition-colors w-full cursor-pointer mt-2"
+            >
+              Generate Secure Hash
+            </button>
+          </section>
+
+          <!-- RIGHT PANEL: OUTPUT RESULTS CONTAINER (Medium Grey Card) -->
+          <section
+            class="bg-slate-100 border border-slate-200 rounded-xl p-6 flex flex-col gap-4"
+          >
+            <div
+              class="text-xs uppercase tracking-wider text-slate-500 font-semibold"
+            >
+              2. Hashed Output
+            </div>
+
+            <div class="relative flex-1 flex flex-col">
+              <div
+                id="text-output"
+                class="bg-white border border-slate-200 rounded-lg p-4 min-h-[150px] md:h-full font-mono text-sm text-blue-900 break-all"
+              >
+                <span class="text-slate-400 italic"
+                  >Your generated hash string will appear here...</span
+                >
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
 
-      <!-- Workspace Dashboard Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <!-- Input Component Section (Medium Grey Card) -->
+      <!-- FEATURE MODULE 2: VERIFICATION WORKSPACE -->
+      <div id="panel-verify-workspace" class="hidden">
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-slate-800">
+            Data Integrity Verification
+          </h2>
+          <p class="text-slate-500 mt-1">
+            Check text payloads against specific hash values to uncover data
+            tampering.
+          </p>
+        </div>
+        <!-- [Your newer verification card goes right here] -->
+
         <section
-          class="bg-slate-100 border border-slate-200 rounded-xl p-6 flex flex-col gap-4"
+          class="mt-8 bg-slate-100 border border-slate-200 rounded-xl p-6 flex flex-col gap-4 max-w-2xl mx-auto"
         >
           <div
             class="text-xs uppercase tracking-wider text-slate-500 font-semibold"
           >
-            1. Plain Text Input
+            Verify File/Text Integrity
           </div>
 
-          <textarea
-            id="text-input"
-            placeholder="Type or paste your string content here..."
-            class="w-full min-h-[150px] border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white resize-y outline-none focus:border-blue-900 transition-colors font-mono"
-          ></textarea>
+          <!-- Input Field 1: Dynamic Source Content Section -->
+          <div class="flex flex-col gap-2">
+            <div class="flex justify-between items-center">
+              <label class="text-xs text-slate-500 font-medium"
+                >1. Select Content Source to Verify</label
+              >
+
+              <!-- Sub-Toggle Switch for Verification Tab -->
+              <div class="flex gap-2 p-1 bg-slate-200 rounded-lg w-fit">
+                <button
+                  id="toggle-verify-text"
+                  type="button"
+                  class="text-xs font-bold px-3 py-1 rounded-md bg-white text-blue-900 shadow-sm transition-all cursor-pointer"
+                >
+                  Text
+                </button>
+                <button
+                  id="toggle-verify-file"
+                  type="button"
+                  class="text-xs font-bold px-3 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
+                >
+                  File
+                </button>
+              </div>
+            </div>
+
+            <!-- OPTION A: Text Box (Visible by default) -->
+            <div id="verify-text-container" class="block">
+              <textarea
+                id="verify-text-input"
+                placeholder="Type or paste the exact plain text content you want to check..."
+                class="w-full min-h-[120px] border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white resize-y outline-none focus:border-blue-900 transition-colors font-mono"
+              ></textarea>
+            </div>
+
+            <!-- OPTION B: Drop Zone (Hidden by default) -->
+            <div id="verify-file-container" class="hidden">
+              <div
+                id="drop-zone"
+                class="w-full border-2 border-dashed border-slate-300 rounded-xl p-8 bg-white hover:bg-slate-50 hover:border-blue-900 transition-all flex flex-col items-center justify-center gap-2 cursor-pointer group"
+              >
+                <span
+                  class="text-3xl group-hover:scale-110 transition-transform"
+                  >📄</span
+                >
+                <p class="text-sm font-semibold text-slate-700 text-center">
+                  Drag & drop your file here, or
+                  <span class="text-blue-900 underline">browse</span>
+                </p>
+                <p
+                  id="file-details"
+                  class="text-xs text-slate-400 text-center italic"
+                >
+                  Supports any file format up to 50MB
+                </p>
+                <input type="file" id="hidden-file-input" class="hidden" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Input Field 2: The Expected Target Hash String -->
+          <div class="flex flex-col gap-2">
+            <label class="text-xs text-slate-500 font-medium"
+              >2. Paste Expected Hash Signature</label
+            >
+            <input
+              type="text"
+              id="verify-hash-signature"
+              placeholder="Paste the official hash string here (e.g. 2cf24dba...)"
+              class="w-full border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white outline-none focus:border-blue-900 transition-colors font-mono"
+            />
+          </div>
 
           <div class="flex flex-col gap-2">
             <label
@@ -56,140 +275,55 @@
               Select Algorithm
             </label>
             <select
-              id="algorithm-select"
+              id="algorithm-select-s"
               class="w-full border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white outline-none focus:border-blue-900 transition-colors"
             >
-              <option value="none">PICK AN ALGORITHM</option>
+              -
+              <option value="none">-- SELECT THE ALGORITHM TYPE USED --</option>
               <option value="sha256">SHA-256</option>
               <option value="sha1">SHA-1</option>
               <option value="md5">MD5</option>
             </select>
           </div>
 
-          <!-- Dark Blue Action Button -->
-          <button
-            id="hash-trigger"
-            class="bg-blue-900 hover:bg-blue-950 text-white font-semibold rounded-lg p-3.5 text-base transition-colors w-full cursor-pointer"
-          >
-            Generate Secure Hash
-          </button>
+          <!-- Action Button & Output Readout Line -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center mt-2">
+            <button
+              id="verify-trigger"
+              class="bg-blue-900 hover:bg-blue-950 text-white font-semibold rounded-lg p-3 text-base transition-colors w-full cursor-pointer"
+            >
+              Verify Integrity Match
+            </button>
 
-          <!-- I would come back here to make the user to be able to generate thier own key with thier own words -->
-          <!-- <button
-            id="hash-key"
-            class="bg-blue-900 hover:bg-blue-950 text-white font-semibold rounded-lg p-3.5 text-base transition-colors w-full cursor-pointer"
-          >
-            Generate Key
-          </button> -->
-        </section>
-
-        <!-- Output Component Section (Medium Grey Card) -->
-        <section
-          class="bg-slate-100 border border-slate-200 rounded-xl p-6 flex flex-col gap-4"
-        >
-          <div
-            class="text-xs uppercase tracking-wider text-slate-500 font-semibold"
-          >
-            2. Hashed Output
-          </div>
-
-          <div class="relative flex-1 flex flex-col">
+            <!-- Dynamic Alert Readout Area -->
             <div
-              id="text-output"
-              class="bg-white border border-slate-200 rounded-lg p-4 min-h-[150px] md:h-full word-all font-mono text-sm text-blue-900 break-all"
+              id="verify-status-output"
+              class="border border-slate-200 bg-white rounded-lg p-3 text-center font-medium text-sm text-slate-400 min-h-[48px] flex items-center justify-center"
             >
-              <span class="text-slate-400 italic"
-                >Your generated hash will appear here...</span
-              >
+              Awaiting verification inputs...
             </div>
-
-            <!-- <div
-              id="key"
-              class="bg-white border border-slate-200 rounded-lg p-4 min-h-[50px] word-all font-mono text-sm text-blue-900 break-all"
-            >
-              <span class="text-slate-400 italic"
-                >Your key will appear here...</span
-              >
-            </div> -->
           </div>
         </section>
       </div>
 
-      <!-- Data Integrity Verification Card -->
-      <section
-        class="mt-8 bg-slate-100 border border-slate-200 rounded-xl p-6 flex flex-col gap-4 max-w-2xl mx-auto"
-      >
-        <div
-          class="text-xs uppercase tracking-wider text-slate-500 font-semibold"
-        >
-          Verify File/Text Integrity
+      <!-- FEATURE MODULE 3: CIPHER WORKSPACE (Left empty for later) -->
+      <div id="panel-cipher-workspace" class="hidden">
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-slate-800">
+            Symmetric AES Key Encryption
+          </h2>
+          <p class="text-slate-500 mt-1">
+            Lock and unlock string payloads using private algorithmic cipher
+            keys.
+          </p>
         </div>
-
-        <!-- Input Field 1: The Raw Source Content -->
-        <div class="flex flex-col gap-2">
-          <label class="text-xs text-slate-500 font-medium"
-            >1. Paste Original Text to Check</label
-          >
-          <textarea
-            id="verify-text-input"
-            placeholder="Type or paste the raw content you want to verify..."
-            class="w-full min-h-[100px] border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white resize-y outline-none focus:border-blue-900 transition-colors font-mono"
-          ></textarea>
-        </div>
-
-        <!-- Input Field 2: The Expected Target Hash String -->
-        <div class="flex flex-col gap-2">
-          <label class="text-xs text-slate-500 font-medium"
-            >2. Paste Expected Hash Signature</label
-          >
-          <input
-            type="text"
-            id="verify-hash-signature"
-            placeholder="Paste the official hash string here (e.g. 2cf24dba...)"
-            class="w-full border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white outline-none focus:border-blue-900 transition-colors font-mono"
-          />
-        </div>
-
-        <div class="flex flex-col gap-2">
-          <label
-            for="algorithm-select"
-            class="text-xs uppercase tracking-wider text-slate-500 font-semibold"
-          >
-            Select Algorithm
-          </label>
-          <select
-            id="algorithm-select-s"
-            class="w-full border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white outline-none focus:border-blue-900 transition-colors"
-          >
-            -
-            <option value="none">
-              SELECT THE ALGORITHM TYPE GIVEN BY THE SOFTWARE PRODUCER
-            </option>
-            <option value="sha256">SHA-256</option>
-            <option value="sha1">SHA-1</option>
-            <option value="md5">MD5</option>
-          </select>
-        </div>
-
-        <!-- Action Button & Output Readout Line -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center mt-2">
-          <button
-            id="verify-trigger"
-            class="bg-blue-900 hover:bg-blue-950 text-white font-semibold rounded-lg p-3 text-base transition-colors w-full cursor-pointer"
-          >
-            Verify Integrity Match
-          </button>
-
-          <!-- Dynamic Alert Readout Area -->
-          <div
-            id="verify-status-output"
-            class="border border-slate-200 bg-white rounded-lg p-3 text-center font-medium text-sm text-slate-400 min-h-[48px] flex items-center justify-center"
-          >
-            Awaiting verification inputs...
-          </div>
-        </div>
-      </section>
+      </div>
     </main>
+
+    <script src="hashing.js"></script>
+    <script src="verify.js"></script>
+    <script src="hashTextslides.js"></script>
+    <script src="UXUIExp.js"></script>
 
     <script>
       document
@@ -246,57 +380,66 @@
       document
         .getElementById("verify-trigger")
         .addEventListener("click", async () => {
-          const vti = document.getElementById("verify-text-input").value;
-          const vhs = document.getElementById("verify-hash-signature").value;
+          const vhs = document
+            .getElementById("verify-hash-signature")
+            .value.trim();
           const algorSel = document.getElementById("algorithm-select-s").value;
           const vso = document.getElementById("verify-status-output");
 
-          if (!vti || !vhs) {
+          if (!selectedFileContainer || !vhs || algorSel === "none") {
             vso.innerHTML =
-              '<span class="text-red-500">Provide atext or a file for me to verify.</span>';
+              '<span class="text-red-500">Provide a file, a hash signature, and an algorithm type.</span>';
             return;
           }
 
-          if (!algorSel) {
-            vso.innerHTML =
-              '<span class="text-red-500">Please select the algorithm type provided by the software producer</span>';
-          }
-
           vso.innerHTML =
-            '<span class="text-slate-400 animate-pulse">Running verification math...</span>';
+            '<span class="text-slate-400 animate-pulse">Computing cryptographic hash locally...</span>';
 
           try {
-            const res = await fetch("http://localhost:9000/api/verify", {
-              method: "POST",
+            // Read the file as an ArrayBuffer (raw binary bytes instead of text strings)
+            const fileReader = new FileReader();
+            fileReader.readAsArrayBuffer(selectedFileContainer);
 
-              headers: {
-                "Content-Type": "application/json",
-              },
+            fileReader.onload = async (event) => {
+              const arrayBuffer = event.target.result;
 
-              body: JSON.stringify({
-                text: vti,
-                expectedHash: vhs,
-                algorithmProvided: algorSel,
-              }),
-            });
+              // Map your selection to the standard Web Crypto names (e.g. SHA-256)
+              let cryptoAlgoName = algorSel.toUpperCase(); // turns 'sha256' into 'SHA-256'
+              if (cryptoAlgoName === "SHA256") cryptoAlgoName = "SHA-256";
+              if (cryptoAlgoName === "SHA1") cryptoAlgoName = "SHA-1";
 
-            const data = await res.json();
-
-            if (res.ok) {
-              if (data.match === true) {
+              // Note: Web Crypto doesn't support the legacy MD5 algorithm locally for security reasons!
+              if (cryptoAlgoName === "MD5") {
                 vso.innerHTML =
-                  '<span class="text-green-600 font-bold">✓ INTEGRITY MATCH: Text matches perfectly!</span>';
+                  '<span class="text-red-500">Web Crypto API does not support legacy MD5. Please select SHA-256 or SHA-1.</span>';
+                return;
+              }
+
+              // 3. Compute the hash using the browser's native hardware engine
+              const hashBuffer = await crypto.subtle.digest(
+                cryptoAlgoName,
+                arrayBuffer,
+              );
+
+              // 4. Convert the binary hash buffer into a readable hexadecimal string
+              const hashArray = Array.from(new Uint8Array(hashBuffer));
+              const computedLocalHash = hashArray
+                .map((b) => b.toString(16).padStart(2, "0"))
+                .join("");
+
+              // 5. Compare the results directly on the frontend screen!
+              if (computedLocalHash === vhs.toLowerCase()) {
+                vso.innerHTML =
+                  '<span class="text-emerald-600 font-bold">✓ INTEGRITY MATCH: Local file matches signature perfectly!</span>';
               } else {
                 vso.innerHTML =
-                  '<span class="text-red-500 font-bold">✗ WARNING: Hash signature does not match!</span>';
+                  '<span class="text-red-500 font-bold">✗ WARNING: File has been tampered with or corrupted!</span>';
               }
-            } else {
-              vso.innerHTML = `<span class="text-red-500">Error: ${data.error}</span>`;
-            }
+            };
           } catch (error) {
-            console.error(error + " verifying error");
+            console.error("Local hashing error:", error);
             vso.innerHTML =
-              '<span class="text-red-500">Server Error: Failed to verify content.</span>';
+              '<span class="text-red-500">Failed to calculate file hash locally.</span>';
           }
         });
     </script>
