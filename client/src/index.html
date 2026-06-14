@@ -210,6 +210,8 @@
                 >
                   Text
                 </button>
+
+                <!-- file button -->
                 <button
                   id="toggle-verify-file"
                   type="button"
@@ -320,128 +322,13 @@
       </div>
     </main>
 
+    <script src="UXUIExp.js"></script>
+    <script src="hashTextslides.js"></script>
     <script src="hashing.js"></script>
     <script src="verify.js"></script>
-    <script src="hashTextslides.js"></script>
-    <script src="UXUIExp.js"></script>
 
     <script>
-      document
-        .getElementById("hash-trigger")
-        .addEventListener("click", async () => {
-          const text_input = document.getElementById("text-input").value;
-          const algorithm_select =
-            document.getElementById("algorithm-select").value;
-          const text_output = document.getElementById("text-output");
-
-          if (algorithm_select === "none") {
-            return (text_output.innerHTML =
-              '<span class="text-red-500">Please provide an algorithm type.</span>');
-          }
-
-          if (!text_input) {
-            return (text_output.innerHTML =
-              '<span class="text-red-500">Please provide a text input.</span>');
-          }
-
-          text_output.innerHTML =
-            '<span class="text-slate-400 animate-pulse">Processing...</span>';
-
-          try {
-            const res = await fetch("http://localhost:9000/api/hash", {
-              method: "POST",
-
-              headers: {
-                "Content-Type": "application/json",
-              },
-
-              body: JSON.stringify({
-                text: text_input,
-                algorithm: algorithm_select,
-              }),
-            });
-
-            const data = await res.json();
-
-            if (res.ok) {
-              text_output.innerHTML = `<span class="text-blue-900 font-bold break-all">${data.hash}</span>`;
-            } else {
-              text_output.innerHTML = `<span class="text-red-500">Backend Error:${data.error}</span>`;
-            }
-          } catch (error) {
-            console.error(error);
-            text_output.innerHTML =
-              '<span class = "text-red-500">Connection Failed: Server is off</span>' +
-              error;
-            return;
-          }
-        });
-
-      document
-        .getElementById("verify-trigger")
-        .addEventListener("click", async () => {
-          const vhs = document
-            .getElementById("verify-hash-signature")
-            .value.trim();
-          const algorSel = document.getElementById("algorithm-select-s").value;
-          const vso = document.getElementById("verify-status-output");
-
-          if (!selectedFileContainer || !vhs || algorSel === "none") {
-            vso.innerHTML =
-              '<span class="text-red-500">Provide a file, a hash signature, and an algorithm type.</span>';
-            return;
-          }
-
-          vso.innerHTML =
-            '<span class="text-slate-400 animate-pulse">Computing cryptographic hash locally...</span>';
-
-          try {
-            // Read the file as an ArrayBuffer (raw binary bytes instead of text strings)
-            const fileReader = new FileReader();
-            fileReader.readAsArrayBuffer(selectedFileContainer);
-
-            fileReader.onload = async (event) => {
-              const arrayBuffer = event.target.result;
-
-              // Map your selection to the standard Web Crypto names (e.g. SHA-256)
-              let cryptoAlgoName = algorSel.toUpperCase(); // turns 'sha256' into 'SHA-256'
-              if (cryptoAlgoName === "SHA256") cryptoAlgoName = "SHA-256";
-              if (cryptoAlgoName === "SHA1") cryptoAlgoName = "SHA-1";
-
-              // Note: Web Crypto doesn't support the legacy MD5 algorithm locally for security reasons!
-              if (cryptoAlgoName === "MD5") {
-                vso.innerHTML =
-                  '<span class="text-red-500">Web Crypto API does not support legacy MD5. Please select SHA-256 or SHA-1.</span>';
-                return;
-              }
-
-              // 3. Compute the hash using the browser's native hardware engine
-              const hashBuffer = await crypto.subtle.digest(
-                cryptoAlgoName,
-                arrayBuffer,
-              );
-
-              // 4. Convert the binary hash buffer into a readable hexadecimal string
-              const hashArray = Array.from(new Uint8Array(hashBuffer));
-              const computedLocalHash = hashArray
-                .map((b) => b.toString(16).padStart(2, "0"))
-                .join("");
-
-              // 5. Compare the results directly on the frontend screen!
-              if (computedLocalHash === vhs.toLowerCase()) {
-                vso.innerHTML =
-                  '<span class="text-emerald-600 font-bold">✓ INTEGRITY MATCH: Local file matches signature perfectly!</span>';
-              } else {
-                vso.innerHTML =
-                  '<span class="text-red-500 font-bold">✗ WARNING: File has been tampered with or corrupted!</span>';
-              }
-            };
-          } catch (error) {
-            console.error("Local hashing error:", error);
-            vso.innerHTML =
-              '<span class="text-red-500">Failed to calculate file hash locally.</span>';
-          }
-        });
+     
     </script>
   </body>
 </html>

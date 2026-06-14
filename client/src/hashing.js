@@ -1,3 +1,53 @@
+// The text hashing
+document.getElementById("hash-trigger").addEventListener("click", async () => {
+  const text_input = document.getElementById("text-input").value;
+  const algorithm_select = document.getElementById("algorithm-select").value;
+  const text_output = document.getElementById("text-output");
+
+  if (algorithm_select === "none") {
+    return (text_output.innerHTML =
+      '<span class="text-red-500">Please provide an algorithm type.</span>');
+  }
+
+  if (!text_input) {
+    return (text_output.innerHTML =
+      '<span class="text-red-500">Please provide a text input.</span>');
+  }
+
+  text_output.innerHTML =
+    '<span class="text-slate-400 animate-pulse">Processing...</span>';
+
+  try {
+    const res = await fetch("http://localhost:9000/api/hash", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        text: text_input,
+        algorithm: algorithm_select,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      text_output.innerHTML = `<span class="text-blue-900 font-bold break-all">${data.hash}</span>`;
+    } else {
+      text_output.innerHTML = `<span class="text-red-500">Backend Error:${data.error}</span>`;
+    }
+  } catch (error) {
+    console.error(error);
+    text_output.innerHTML =
+      '<span class = "text-red-500">Connection Failed: Server is off</span>' +
+      error;
+    return;
+  }
+});
+
+// The file Hashing
 document.getElementById("hash-trigger").addEventListener("click", async () => {
   const algo = document.getElementById("algorithm-select").value;
   const outputBox = document.getElementById("text-output");
