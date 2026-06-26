@@ -9,6 +9,13 @@ let currentHashMode = "text";
 
 toggleTextBtn.addEventListener("click", () => {
   currentHashMode = "text";
+
+  document.getElementById("text-output").innerHTML =
+    `<span class="text-slate-400 italic"
+                  >Your generated hash string will appear <br> here...</span
+                >`; //works
+  document.getElementById("init-txt-algo").selected = true; //works
+
   hashTextContainer.classList.replace("hidden", "block");
   hashFileContainer.classList.replace("block", "hidden");
 
@@ -20,6 +27,14 @@ toggleTextBtn.addEventListener("click", () => {
 });
 
 toggleFileBtn.addEventListener("click", () => {
+  // text-input
+  document.getElementById("text-input").value = "";
+  document.getElementById("text-output").innerHTML =
+    `<span class="text-slate-400 italic"
+                  >Your generated hash string will appear <br> here...</span
+                >`; //works
+  document.getElementById("init-txt-algo").selected = true; //works
+
   currentHashMode = "file";
   hashFileContainer.classList.replace("hidden", "block");
   hashTextContainer.classList.replace("block", "hidden");

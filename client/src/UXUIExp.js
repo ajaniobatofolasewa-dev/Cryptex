@@ -1,3 +1,25 @@
+// for the cipher button and display
+const navCipherBtn = document.getElementById("nav-cipher");
+const viewCipher = document.getElementById("panel-cipher-workspace");
+
+navCipherBtn.addEventListener("click", async () => {
+  viewHash.classList.replace("block", "hidden");
+  viewVerify.classList.replace("block", "hidden");
+  viewCipher.classList.replace("hidden", "block");
+
+  navCipherBtn.className =
+    "w-full text-left font-semibold text-sm px-4 py-3 rounded-lg bg-blue-900 text-white transition-colours cursor-pointer";
+  btnHash.className =
+    "w-full text-left font-semibold text-sm px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer";
+  btnVerify.className =
+    "w-full text-left font-semibold text-sm px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer";
+
+  // to reload the output for all tabs
+  document.getElementById("text-output").innerText = ""; // works
+  document.getElementById("verify-status-output").innerText = ""; //works
+  document.getElementById("cipher-output-display").innerText = ""; // works
+});
+
 // Tohandle switching between text and file
 const toggleVerifyTextBtn = document.getElementById("toggle-verify-text");
 const toggleVerifyFileBtn = document.getElementById("toggle-verify-file");
@@ -18,12 +40,21 @@ toggleVerifyTextBtn.addEventListener("click", () => {
     "text-xs font-bold px-3 py-1 rounded-md bg-white text-blue-900 shadow-sm transition-all cursor-pointer";
   toggleVerifyFileBtn.className =
     "text-xs font-bold px-3 py-1 rounded-md text-slate-600 hover:text-slate-900 transition-all cursor-pointer";
+
+  document.getElementById("verify-status-output").innerText = ""; //works
+  document.getElementById("verify-hash-signature").value = ""; //works
+  document.getElementById("init").selected = true; //works
 });
 
 toggleVerifyFileBtn.addEventListener("click", () => {
   currentVerifyMode = "file";
+
   verifyFileContainer.classList.replace("hidden", "block");
   verifyTextContainer.classList.replace("block", "hidden");
+
+  document.getElementById("verify-status-output").innerText = ""; //works
+  document.getElementById("verify-hash-signature").value = ""; //works
+  document.getElementById("init").selected = true; //works
 
   // Style button updates
   toggleVerifyFileBtn.className =
@@ -47,8 +78,15 @@ btnVerify.addEventListener("click", () => {
   // 2. Adjust button styling (make verification button look dark blue and active)
   btnVerify.className =
     "w-full text-left font-semibold text-sm px-4 py-3 rounded-lg bg-blue-900 text-white transition-colors cursor-pointer";
+  navCipherBtn.className =
+    "w-full text-left font-semibold text-sm px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer";
   btnHash.className =
     "w-full text-left font-semibold text-sm px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer";
+
+  // to reload the output for all tabs
+  document.getElementById("text-output").innerText = ""; // works
+  document.getElementById("verify-status-output").innerText = ""; //works
+  document.getElementById("cipher-output-display").innerText = ""; // works
 });
 
 // When user clicks the Hashing sidebar item...
@@ -60,6 +98,12 @@ btnHash.addEventListener("click", () => {
     "w-full text-left font-semibold text-sm px-4 py-3 rounded-lg bg-blue-900 text-white transition-colors cursor-pointer";
   btnVerify.className =
     "w-full text-left font-semibold text-sm px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer";
+  navCipherBtn.className =
+    "w-full text-left font-semibold text-sm px-4 py-3 rounded-lg text-slate-600 hover:bg-slate-200 transition-colors cursor-pointer";
+
+  document.getElementById("text-output").innerText = ""; // works
+  document.getElementById("verify-status-output").innerText = ""; //works
+  document.getElementById("cipher-output-display").innerText = ""; // works
 });
 
 const dropZone = document.getElementById("drop-zone");

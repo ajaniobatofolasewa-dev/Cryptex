@@ -93,6 +93,7 @@ document.getElementById("hash-trigger").addEventListener("click", async () => {
 
   // ─── BRANCH B: USER SELECTION IS IN FILE INPUT MODE ───
   else if (currentHashMode === "file") {
+    
     // Check file input validation instead of text!
     if (!selectedGeneratorFile) {
       outputBox.innerHTML =
