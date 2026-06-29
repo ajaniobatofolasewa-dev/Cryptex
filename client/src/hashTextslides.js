@@ -12,7 +12,8 @@ toggleTextBtn.addEventListener("click", () => {
 
   document.getElementById("text-output").innerHTML =
     `<span class="text-slate-400 italic"
-                  >Your generated hash string will appear <br> here...</span
+                  >Your generated hash string will appear <br />
+                  here...</span
                 >`; //works
   document.getElementById("init-txt-algo").selected = true; //works
 
@@ -27,15 +28,17 @@ toggleTextBtn.addEventListener("click", () => {
 });
 
 toggleFileBtn.addEventListener("click", () => {
+  currentHashMode = "file";
+
   // text-input
-  document.getElementById("text-input").value = "";
+  // document.getElementById("text-input").value = "";
   document.getElementById("text-output").innerHTML =
     `<span class="text-slate-400 italic"
-                  >Your generated hash string will appear <br> here...</span
+                  >Your generated hash string will appear <br />
+                  here...</span
                 >`; //works
   document.getElementById("init-txt-algo").selected = true; //works
 
-  currentHashMode = "file";
   hashFileContainer.classList.replace("hidden", "block");
   hashTextContainer.classList.replace("block", "hidden");
 

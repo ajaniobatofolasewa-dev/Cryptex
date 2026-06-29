@@ -132,7 +132,9 @@
                 id="algorithm-select"
                 class="w-full border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white outline-none focus:border-blue-900 transition-colors"
               >
-                <option value="none" id="init-txt-algo">-- Select Hashing Format --</option>
+                <option value="none" id="init-txt-algo">
+                  -- Select Hashing Format --
+                </option>
                 <option value="sha256">SHA-256</option>
                 <option value="sha1">SHA-1</option>
                 <option value="md5">MD5</option>
@@ -159,12 +161,41 @@
             </div>
 
             <div class="relative flex-1 flex flex-col">
+              <!-- 1. The relative wrapper enclosing both elements gets the 'group' utility class -->
+              <div
+                class="absolute bottom-3 right-3 flex items-center gap-1 group cursor-pointer"
+                id="hash-copy-button"
+              >
+                <!-- 2. The SVG Icon -->
+                <span
+                  class="text-xs text-gray-600 border-1 mb-2 border-black hidden group-hover:block transition-all"
+                >
+                  Copy
+                </span>
+                <svg
+                id="hashSVG"
+                  xmlns="http://w3.org"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-copy text-gray-500 group-hover:text-gray-800 transition-colors"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"
+                  />
+                </svg>
+
+                <!-- 3. The hidden text block that triggers automatically on parent hover -->
+              </div>
               <div
                 id="text-output"
                 class="bg-white border border-slate-200 rounded-lg p-4 min-h-[150px] md:h-full font-mono text-sm text-blue-900 break-all"
               >
                 <span class="text-slate-400 italic"
-                  >Your generated hash string will appear <br> here...</span
+                  >Your generated hash string will appear <br />
+                  here...</span
                 >
               </div>
             </div>
@@ -281,7 +312,9 @@
               class="w-full border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white outline-none focus:border-blue-900 transition-colors"
             >
               -
-              <option value="none" id="init">-- SELECT THE ALGORITHM TYPE USED --</option>
+              <option value="none" id="init">
+                -- SELECT THE ALGORITHM TYPE USED --
+              </option>
               <option value="sha256">SHA-256</option>
               <option value="sha1">SHA-1</option>
               <option value="md5">MD5</option>
@@ -310,160 +343,239 @@
 
       <!-- FEATURE MODULE 3: CIPHER WORKSPACE (Left empty for later) -->
       <!-- FEATURE MODULE 3: CIPHER WORKSPACE -->
-<div id="panel-cipher-workspace" class="hidden">
-  <div class="mb-8">
-    <h2 class="text-2xl font-bold text-slate-800">Symmetric AES Key Encryption</h2>
-    <p class="text-slate-500 mt-1">Lock and unlock string payloads or local documents using private algorithmic cipher keys.</p>
-  </div>
+      <div id="panel-cipher-workspace" class="hidden">
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-slate-800">
+            Symmetric AES Key Encryption
+          </h2>
+          <p class="text-slate-500 mt-1">
+            Lock and unlock string payloads or local documents using private
+            algorithmic cipher keys.
+          </p>
+        </div>
 
-  <!-- Master Layer 1 Box layout container card -->
-  <div class="bg-slate-100 border border-slate-200 rounded-xl p-6 flex flex-col gap-6 max-w-2xl mx-auto">
-    
-    <!-- LEVEL 1 SUB-TOGGLE ROW (File vs Text) -->
-    <div class="flex items-center justify-between border-b border-slate-200 pb-4">
-      <span class="text-xs uppercase tracking-wider text-slate-500 font-semibold">1. Select Payload Type</span>
-      
-      <div class="flex gap-2 p-1 bg-slate-200 rounded-lg w-fit">
-        <button 
-          id="cipher-toggle-file" 
-          type="button"
-          class="text-xs font-bold px-3 py-1.5 rounded-md bg-white text-blue-900 shadow-sm transition-all cursor-pointer"
+        <!-- Master Layer 1 Box layout container card -->
+        <div
+          class="bg-slate-100 border border-slate-200 rounded-xl p-6 flex flex-col gap-6 max-w-2xl mx-auto"
         >
-          File Input
-        </button>
-        <button 
-          id="cipher-toggle-text" 
-          type="button"
-          class="text-xs font-bold px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
-        >
-          Text Input
-        </button>
+          <!-- LEVEL 1 SUB-TOGGLE ROW (File vs Text) -->
+          <div
+            class="flex items-center justify-between border-b border-slate-200 pb-4"
+          >
+            <span
+              class="text-xs uppercase tracking-wider text-slate-500 font-semibold"
+              >1. Select Payload Type</span
+            >
+
+            <div class="flex gap-2 p-1 bg-slate-200 rounded-lg w-fit">
+              <button
+                id="cipher-toggle-file"
+                type="button"
+                class="text-xs font-bold px-3 py-1.5 rounded-md bg-white text-blue-900 shadow-sm transition-all cursor-pointer"
+              >
+                File Input
+              </button>
+              <button
+                id="cipher-toggle-text"
+                type="button"
+                class="text-xs font-bold px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
+              >
+                Text Input
+              </button>
+            </div>
+          </div>
+
+          <!-- LEVEL 2 INTERNAL MODE ROW (Encrypt vs Decrypt) -->
+          <div class="flex items-center justify-between">
+            <span
+              class="text-xs uppercase tracking-wider text-slate-500 font-semibold"
+              >2. Select Operation Mode</span
+            >
+
+            <div class="flex gap-2 p-1 bg-slate-200 rounded-lg w-fit">
+              <button
+                id="cipher-toggle-encrypt"
+                type="button"
+                class="text-xs font-bold px-3 py-1.5 rounded-md bg-white text-blue-900 shadow-sm transition-all cursor-pointer"
+              >
+                Encrypt Mode
+              </button>
+              <button
+                id="cipher-toggle-decrypt"
+                type="button"
+                class="text-xs font-bold px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
+              >
+                Decrypt Mode
+              </button>
+            </div>
+          </div>
+
+          <!-- Visual Anchor Notice Placeholder Area -->
+          <div
+            class="text-center p-4 bg-white border border-slate-200 rounded-lg text-sm text-slate-400 font-mono"
+          >
+            <!-- ======================================================== -->
+            <!-- INPUT COMPONENT HOUSING BLOCKS (Nested Toggles)          -->
+            <!-- ======================================================== -->
+
+            <!-- SECTION A: FILE CONTENT WORKSPACES -->
+            <div
+              id="cipher-file-master-container"
+              class="block flex flex-col gap-4"
+            >
+              <!-- Sub-View 1: File Encrypt (Default Visible) -->
+              <div id="view-file-encrypt" class="block">
+                <div
+                  class="w-full border-2 border-dashed border-slate-300 rounded-xl p-8 bg-white hover:bg-slate-50 hover:border-blue-900 transition-all flex flex-col items-center justify-center gap-2 cursor-pointer group"
+                >
+                  <span
+                    class="text-3xl group-hover:scale-110 transition-transform"
+                    >🔒</span
+                  >
+                  <p class="text-sm font-semibold text-slate-700 text-center">
+                    Drag & drop raw file to ENCRYPT, or
+                    <span class="text-blue-900 underline">browse</span>
+                  </p>
+                  <p
+                    id="cipher-file-encrypt-details"
+                    class="text-xs text-slate-400 text-center italic"
+                  >
+                    Ready to secure document
+                  </p>
+                </div>
+              </div>
+
+              <!-- Sub-View 2: File Decrypt (Default Hidden) -->
+              <div id="view-file-decrypt" class="hidden">
+                <div
+                  class="w-full border-2 border-dashed border-slate-300 rounded-xl p-8 bg-white hover:bg-slate-50 hover:border-red-600 transition-all flex flex-col items-center justify-center gap-2 cursor-pointer group"
+                >
+                  <span
+                    class="text-3xl group-hover:scale-110 transition-transform"
+                    >🔓</span
+                  >
+                  <p class="text-sm font-semibold text-slate-700 text-center">
+                    Drag & drop locked (.enc) file to DECRYPT, or
+                    <span class="text-blue-900 underline">browse</span>
+                  </p>
+                  <p
+                    id="cipher-file-decrypt-details"
+                    class="text-xs text-slate-400 text-center italic"
+                  >
+                    Ready to unlock file array
+                  </p>
+                </div>
+              </div>
+
+              <!-- Shared File Browser Trigger Input -->
+              <input type="file" id="cipher-hidden-file-input" class="hidden" />
+            </div>
+
+            <!-- SECTION B: TEXT CONTENT WORKSPACES (Default Hidden Entirely) -->
+            <div
+              id="cipher-text-master-container"
+              class="hidden flex flex-col gap-4"
+            >
+              <!-- Sub-View 3: Text Encrypt -->
+              <div id="view-text-encrypt" class="block flex flex-col gap-2">
+                <label class="text-xs text-slate-500 font-medium"
+                  >Message to Encrypt</label
+                >
+                <textarea
+                  id="cipher-text-encrypt-input"
+                  placeholder="Type secret text message to lock away..."
+                  class="w-full min-h-[120px] border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white resize-y outline-none focus:border-blue-900 transition-colors font-mono"
+                ></textarea>
+              </div>
+
+              <!-- Sub-View 4: Text Decrypt -->
+              <div id="view-text-decrypt" class="hidden flex flex-col gap-2">
+                <label class="text-xs text-slate-500 font-medium"
+                  >Ciphertext String to Decrypt</label
+                >
+                <textarea
+                  id="cipher-text-decrypt-input"
+                  placeholder="Paste the scrambled encrypted string block here..."
+                  class="w-full min-h-[120px] border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white resize-y outline-none focus:border-blue-900 transition-colors font-mono"
+                ></textarea>
+              </div>
+            </div>
+            <p class="mt-4"></p>
+            <!-- ======================================================== -->
+            <!-- SHARED LOWER FORMS: Visible at all times across modes    -->
+            <!-- ======================================================== -->
+
+            <!-- Private Password Key Input Field -->
+            <div class="flex flex-col gap-2">
+              <label class="text-xs text-slate-500 font-medium"
+                >3. Private Secret Encryption Key (Password)</label
+              >
+              <input
+                type="password"
+                id="cipher-key-input"
+                placeholder="Enter your secret cryptographic passphrase..."
+                class="w-full border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white outline-none focus:border-blue-900 transition-colors font-mono"
+              />
+            </div>
+
+            <p class="mt-4"></p>
+
+            <!-- Main Execution Action Trigger Button -->
+            <button
+              id="cipher-trigger"
+              class="bg-blue-900 hover:bg-blue-950 text-white font-semibold rounded-lg p-3.5 text-base transition-colors w-full cursor-pointer"
+            >
+              Execute Secure Process
+            </button>
+
+            <p class="mt-4"></p>
+
+            <!-- Results & Dynamic Feedback View Window -->
+            <div class="flex flex-col gap-2">
+              <label class="text-xs text-slate-500 font-medium"
+                >Process Result Output</label
+              >
+              <div
+                id="cipher-output-display"
+                class="border border-slate-200 bg-white rounded-lg p-4 text-center font-medium text-sm text-slate-400 min-h-[60px] flex items-center justify-center break-all font-mono"
+              >
+                Standing by for credentials...
+              </div>
+            </div>
+            <div
+              class="relative left-[97%] flex items-center gap-1 mt-[2px] group cursor-pointer"
+              id="cipher-copy-btn"
+            >
+              <!-- 2. The SVG Icon -->
+              <svg
+              id="cipherSVG"
+                xmlns="http://w3.org"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-copy text-gray-500 group-hover:text-gray-800 transition-colors"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z"
+                />
+              </svg>
+              
+              <!-- 3. The hidden text block that triggers automatically on parent hover -->
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <!-- LEVEL 2 INTERNAL MODE ROW (Encrypt vs Decrypt) -->
-    <div class="flex items-center justify-between">
-      <span class="text-xs uppercase tracking-wider text-slate-500 font-semibold">2. Select Operation Mode</span>
-      
-      <div class="flex gap-2 p-1 bg-slate-200 rounded-lg w-fit">
-        <button 
-          id="cipher-toggle-encrypt" 
-          type="button"
-          class="text-xs font-bold px-3 py-1.5 rounded-md bg-white text-blue-900 shadow-sm transition-all cursor-pointer"
-        >
-          Encrypt Mode
-        </button>
-        <button 
-          id="cipher-toggle-decrypt" 
-          type="button"
-          class="text-xs font-bold px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-all cursor-pointer"
-        >
-          Decrypt Mode
-        </button>
-      </div>
-    </div>
-
-    <!-- Visual Anchor Notice Placeholder Area -->
-    <div class="text-center p-4 bg-white border border-slate-200 rounded-lg text-sm text-slate-400 font-mono">
-      <!-- ======================================================== -->
-<!-- INPUT COMPONENT HOUSING BLOCKS (Nested Toggles)          -->
-<!-- ======================================================== -->
-
-<!-- SECTION A: FILE CONTENT WORKSPACES -->
-<div id="cipher-file-master-container" class="block flex flex-col gap-4">
-  
-  <!-- Sub-View 1: File Encrypt (Default Visible) -->
-  <div id="view-file-encrypt" class="block">
-    <div class="w-full border-2 border-dashed border-slate-300 rounded-xl p-8 bg-white hover:bg-slate-50 hover:border-blue-900 transition-all flex flex-col items-center justify-center gap-2 cursor-pointer group">
-      <span class="text-3xl group-hover:scale-110 transition-transform">🔒</span>
-      <p class="text-sm font-semibold text-slate-700 text-center">Drag & drop raw file to ENCRYPT, or <span class="text-blue-900 underline">browse</span></p>
-      <p id="cipher-file-encrypt-details" class="text-xs text-slate-400 text-center italic">Ready to secure document</p>
-    </div>
-  </div>
-
-  <!-- Sub-View 2: File Decrypt (Default Hidden) -->
-  <div id="view-file-decrypt" class="hidden">
-    <div class="w-full border-2 border-dashed border-slate-300 rounded-xl p-8 bg-white hover:bg-slate-50 hover:border-red-600 transition-all flex flex-col items-center justify-center gap-2 cursor-pointer group">
-      <span class="text-3xl group-hover:scale-110 transition-transform">🔓</span>
-      <p class="text-sm font-semibold text-slate-700 text-center">Drag & drop locked (.enc) file to DECRYPT, or <span class="text-blue-900 underline">browse</span></p>
-      <p id="cipher-file-decrypt-details" class="text-xs text-slate-400 text-center italic">Ready to unlock file array</p>
-    </div>
-  </div>
-
-  <!-- Shared File Browser Trigger Input -->
-  <input type="file" id="cipher-hidden-file-input" class="hidden" />
-</div>
-
-<!-- SECTION B: TEXT CONTENT WORKSPACES (Default Hidden Entirely) -->
-<div id="cipher-text-master-container" class="hidden flex flex-col gap-4">
-  
-  <!-- Sub-View 3: Text Encrypt -->
-  <div id="view-text-encrypt" class="block flex flex-col gap-2">
-    <label class="text-xs text-slate-500 font-medium">Message to Encrypt</label>
-    <textarea id="cipher-text-encrypt-input" placeholder="Type secret text message to lock away..." class="w-full min-h-[120px] border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white resize-y outline-none focus:border-blue-900 transition-colors font-mono"></textarea>
-  </div>
-
-  <!-- Sub-View 4: Text Decrypt -->
-  <div id="view-text-decrypt" class="hidden flex flex-col gap-2">
-    <label class="text-xs text-slate-500 font-medium">Ciphertext String to Decrypt</label>
-    <textarea id="cipher-text-decrypt-input" placeholder="Paste the scrambled encrypted string block here..." class="w-full min-h-[120px] border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white resize-y outline-none focus:border-blue-900 transition-colors font-mono"></textarea>
-  </div>
-
-</div>
-<p class="mt-4"></p>
-<!-- ======================================================== -->
-<!-- SHARED LOWER FORMS: Visible at all times across modes    -->
-<!-- ======================================================== -->
-
-<!-- Private Password Key Input Field -->
-<div class="flex flex-col gap-2">
-  <label class="text-xs text-slate-500 font-medium">3. Private Secret Encryption Key (Password)</label>
-  <input 
-    type="password" 
-    id="cipher-key-input" 
-    placeholder="Enter your secret cryptographic passphrase..."
-    class="w-full border border-slate-200 rounded-lg p-3 text-base text-slate-800 bg-white outline-none focus:border-blue-900 transition-colors font-mono"
-  />
-</div>
-
-<p class="mt-4"></p>
-
-<!-- Main Execution Action Trigger Button -->
-<button 
-  id="cipher-trigger"
-  class="bg-blue-900 hover:bg-blue-950 text-white font-semibold rounded-lg p-3.5 text-base transition-colors w-full cursor-pointer"
->
-  Execute Secure Process
-</button>
-
-<p class="mt-4"></p>
-
-<!-- Results & Dynamic Feedback View Window -->
-<div class="flex flex-col gap-2">
-  <label class="text-xs text-slate-500 font-medium">Process Result Output</label>
-  <div 
-    id="cipher-output-display"
-    class="border border-slate-200 bg-white rounded-lg p-4 text-center font-medium text-sm text-slate-400 min-h-[60px] flex items-center justify-center break-all font-mono"
-  >
-    Standing by for credentials...
-  </div>
-</div>
-
-    </div>
-
-  </div>
-</div>
-
     </main>
 
     <script src="UXUIExp.js"></script>
-    <script src="hashing.js"></script>
+    <script src="copy.js"></script>
     <script src="hashTextslides.js"></script>
+    <script src="hashing.js"></script>
     <script src="verify.js"></script>
     <script src="cipher.js"></script>
 
-    <script>
-     
-    </script>
+    <script></script>
   </body>
 </html>
