@@ -1,3 +1,5 @@
+// Text verification sector
+
 document
   .getElementById("verify-trigger")
   .addEventListener("click", async () => {
@@ -7,11 +9,14 @@ document
       const algorSel = document.getElementById("algorithm-select-s").value;
       const vso = document.getElementById("verify-status-output");
 
-      const aglo = ["none", "NONE"];
+      // const aglo = ["sha-1", "SHA-1", "sha-256", "SHA-256", "md5", "MD5"];
 
-      if (!vti || !vhs || algorSel === aglo.includes) {
+      if (
+        (!vti || !vhs || algorSel === /*aglo.includes(algorSel.trim())*/ "NONE",
+        "none")
+      ) {
         vso.innerHTML =
-          '<span class="text-red-500">Provide a text, a hash signature, and an algorithm type.</span>';
+          '<span class="text-red-500">Provide a text, a hash signature, and a valid algorithm type.</span>';
         return;
       }
 
@@ -34,8 +39,10 @@ document
 
         if (data.match === true) {
           vso.innerHTML = `<span class="text-emerald-600">✓ INTEGRITY MATCH: Local file matches signature perfectly!</span>`;
+          return;
         } else {
           vso.innerHTML = `<span class="text-red-500">✗ WARNING: File has been tampered with or corrupted!</span>`;
+          return;
         }
       } catch (error) {
         vso.innerHTML =

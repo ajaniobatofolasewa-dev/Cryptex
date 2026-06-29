@@ -43,6 +43,8 @@ app.post("/api/hash", (req, res) => {
 app.post("/api/verify", (req, res) => {
   const { text, expectedHash, algorithmProvided } = req.body;
 
+  // const alog = ["none", "NONE"];
+
   try {
     if (!text || !expectedHash || !algorithmProvided) {
       return res

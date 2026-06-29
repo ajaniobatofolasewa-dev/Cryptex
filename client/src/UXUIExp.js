@@ -74,6 +74,7 @@ btnVerify.addEventListener("click", () => {
   // 1. Swap workspaces
   viewVerify.classList.replace("hidden", "block");
   viewHash.classList.replace("block", "hidden");
+  viewCipher.classList.replace("block", "hidden");
 
   // 2. Adjust button styling (make verification button look dark blue and active)
   btnVerify.className =
@@ -93,6 +94,7 @@ btnVerify.addEventListener("click", () => {
 btnHash.addEventListener("click", () => {
   viewHash.classList.replace("hidden", "block");
   viewVerify.classList.replace("block", "hidden");
+  viewCipher.classList.replace("block", "hidden");
 
   btnHash.className =
     "w-full text-left font-semibold text-sm px-4 py-3 rounded-lg bg-blue-900 text-white transition-colors cursor-pointer";

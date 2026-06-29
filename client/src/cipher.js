@@ -7,24 +7,83 @@ const expectedClick = document.getElementById("cipher-hidden-file-input");
 fileEncryptBox.addEventListener("click", () => expectedClick.click());
 
 const fileDecryptBox = document.getElementById("view-file-decrypt");
-
 fileDecryptBox.addEventListener("click", () => expectedClick.click());
 
-expectedClick.addEventListener("change", (e) => {
-  selectedCipherFile = e.target.files[0];
+// 1. Group your drop zones into a clean, workable array list
+const dz = document.getElementById("view-file-decrypt");
+const ez = document.getElementById("view-file-encrypt");
+const dropZones = [ez, dz]; // Clean list of elements
 
+expectedClick.addEventListener("change", (e) => {
+  if (e.target.files.length > 0) {
+    selectedCipherFile = e.target.files[0];
+    handleFileSelection(e.target.files[0]);
+  }
+});
+
+// 3. Prevent browser from opening files when dropped onto the window screen layout
+["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+  window.addEventListener(eventName, (e) => e.preventDefault(), false);
+});
+
+// 4. Loop through the array to add hover styles to BOTH boxes smoothly
+["dragenter", "dragover"].forEach((eventName) => {
+  dropZones.forEach((zone) => {
+    zone.addEventListener(
+      eventName,
+      () => {
+        zone.className =
+          "w-full border-2 border-dashed border-blue-900 rounded-xl p-8 bg-blue-50/50 transition-all flex flex-col items-center justify-center gap-2 cursor-pointer group";
+      },
+      false,
+    );
+  });
+});
+
+// 5. Restore normal gray border layout styles when drag leaves or drops
+["dragleave", "drop"].forEach((eventName) => {
+  dropZones.forEach((zone) => {
+    zone.addEventListener(
+      eventName,
+      () => {
+        zone.className =
+          "w-full border-2 border-dashed border-slate-300 rounded-xl p-8 bg-white hover:bg-slate-50 hover:border-blue-900 transition-all flex flex-col items-center justify-center gap-2 cursor-pointer group";
+      },
+      false,
+    );
+  });
+});
+
+// 6. Capture the file dropping action event package data on both zones
+dropZones.forEach((zone) => {
+  zone.addEventListener("drop", (e) => {
+    const dfs = e.dataTransfer.files;
+    if (dfs.length > 0) {
+      selectedCipherFile = dfs[0];
+      handleFileSelection(dfs[0]);
+    }
+  });
+});
+
+// 7. Update the visual screen strings to show the filename and size
+function handleFileSelection(file) {
+  // Format the file size nicely into Kilobytes or Megabytes
+  const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+
+  // FIXED: Born in the open air so the whole function can see it!
   let detailsBox;
 
   if (currentCipherMode === "encrypt") {
-    const detailsBox = document.getElementById("cipher-file-encrypt-details");
+    detailsBox = document.getElementById("cipher-file-encrypt-details");
   } else {
-    const detailsBox = document.getElementById("cipher-file-decrypt-details");
+    detailsBox = document.getElementById("cipher-file-decrypt-details");
   }
 
-  detailsBox.innerText = "Selected File: " + selectedCipherFile.name;
+  // Display the real filename inside our dash border box
+  detailsBox.innerText = `Selected File: ${file.name} (${sizeInMB} MB)`;
   detailsBox.className =
     "text-xs text-blue-950 font-bold text-center bg-blue-100 rounded px-2 py-1 mt-1";
-});
+}
 
 let currentCipherPayload = "file"; // Tracks 'file' or 'text'
 let currentCipherMode = "encrypt"; // Tracks 'encrypt' or 'decrypt'
@@ -194,10 +253,14 @@ document
             ["deriveKey"],
           );
 
+          const salt = crypto.getRandomValues(new Uint8Array(16));
+
+          const iv = crypto.getRandomValues(new Uint8Array(12));
+
           const aesKey = await crypto.subtle.deriveKey(
             {
               name: "PBKDF2",
-              salt: fileTextEncoder.encode("StaticSaltString"),
+              salt: salt,
               iterations: 100000,
               hash: "SHA-256",
             },
@@ -207,20 +270,19 @@ document
             ["encrypt"],
           );
 
-          const iv = crypto.getRandomValues(new Uint8Array(12));
-
           const fileEncryptedBuffer = await crypto.subtle.encrypt(
             { name: "AES-GCM", iv: iv },
             aesKey,
             rawFileBytes,
           );
 
-          const fileTotalSize = 12 + fileEncryptedBuffer.byteLength;
+          const fileTotalSize = 16 + 12 + fileEncryptedBuffer.byteLength;
 
           const totalFileByte = new Uint8Array(fileTotalSize);
 
-          totalFileByte.set(iv, 0);
-          totalFileByte.set(new Uint8Array(fileEncryptedBuffer), 12);
+          totalFileByte.set(salt, 0);
+          totalFileByte.set(iv, 16);
+          totalFileByte.set(new Uint8Array(fileEncryptedBuffer), 28);
 
           const blob = new Blob([totalFileByte], {
             type: "application/octet-stream",
@@ -231,6 +293,8 @@ document
           download.download = selectedCipherFile.name + ".enc";
 
           download.click();
+
+          URL.revokeObjectURL(download.href); // to remove things like cache and free up memry
         };
 
         reader.readAsArrayBuffer(selectedCipherFile);
@@ -244,9 +308,83 @@ document
       currentCipherPayload === "file" &&
       currentCipherMode === "decrypt"
     ) {
+      if (!selectedCipherFile) {
+        return (outputDisplay.innerHTML =
+          '<p class="text-red-500">Please Provide a file to decrypt</p>');
+      }
+
       outputDisplay.innerHTML =
         '<span class="text-slate-400 animate-pulse">Unlocking encrypted file array...</span>';
-      // We will place the file unlocking logic here!
+
+      try {
+        const reader = new FileReader();
+
+        reader.onload = async (e) => {
+          const encryptedFileBytes = e.target.result;
+
+          const bytesDecoder = new TextDecoder();
+
+          const theEcdKey = new TextEncoder().encode(keyInput);
+
+          const actualStartingBytes = new Uint8Array(encryptedFileBytes);
+
+          const salt = actualStartingBytes.slice(0, 16);
+
+          const iv = actualStartingBytes.slice(16, 28);
+
+          const actualEncryptedPayloadBytes = actualStartingBytes.slice(28);
+
+          try {
+            const baseKey = await crypto.subtle.importKey(
+              "raw",
+              theEcdKey,
+              { name: "PBKDF2" },
+              false,
+              ["deriveKey"],
+            );
+
+            const aesKey = await crypto.subtle.deriveKey(
+              {
+                name: "PBKDF2",
+                salt: salt,
+                iterations: 100000,
+                hash: "SHA-256",
+              },
+
+              baseKey,
+              { name: "AES-GCM", length: 256 },
+              false,
+              ["decrypt"],
+            );
+
+            const decryptedFileBuffer = await crypto.subtle.decrypt(
+              { name: "AES-GCM", iv: iv },
+              aesKey,
+              actualEncryptedPayloadBytes,
+            );
+
+            const blob = new Blob([decryptedFileBuffer], {
+              type: "application/octet-stream",
+            });
+
+            const download = document.createElement("a");
+            download.href = URL.createObjectURL(blob);
+            download.download = selectedCipherFile.name.replace(/\.enc$/, "");
+
+            download.click();
+
+            URL.revokeObjectURL(download.href);
+          } catch (error) {
+            outputDisplay.innerHTML =
+              '<span class="text-red-500 font-bold">✗ Decryption Failed: Invalid password key or corrupted file bundle.</span>';
+          }
+        };
+
+        reader.readAsArrayBuffer(selectedCipherFile);
+      } catch (error) {
+        console.error(error);
+        outputDisplay.innerHTML = `<span class="text-red-500 font-bold">An error occured: ${error.message}</span>`;
+      }
     }
 
     // ─── ROAD 3: TEXT + ENCRYPT ───
