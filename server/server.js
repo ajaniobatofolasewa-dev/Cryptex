@@ -4,6 +4,17 @@ const crypto = require("crypto");
 const cors = require("cors");
 const { config } = require("dotenv");
 
+const path = require('path');
+
+// 1. Tell Express where your static frontend files live
+app.use(express.static(path.join(__dirname, '../client')));
+
+// 2. The Wildcard Route fallback for index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client', 'index.html'));
+});
+
+
 const app = express();
 const PORT = process.env.PORT || 7700;
 
@@ -73,6 +84,8 @@ app.post("/api/verify", (req, res) => {
     console.error("Backend processing error: " + error);
   }
 });
+
+// app.use(express.static(path.join(__dirname, '../client')))
 
 app.listen(PORT, () => {
   console.log(`Backend active on server http://localhost:${PORT}`);
