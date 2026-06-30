@@ -4,6 +4,9 @@ const crypto = require("crypto");
 const cors = require("cors");
 const { config } = require("dotenv");
 
+app.get("/", (req, res) => {
+  res.send("Server is running");
+});
 // const path = require('path');
 
 // // 1. Tell Express where your static frontend files live
@@ -86,9 +89,6 @@ app.post("/api/verify", (req, res) => {
 
 // app.use(express.static(path.join(__dirname, '../client')))
 
-app.get("/", (req, res) => {
-  res.send("Server is running");
-});
 
 app.listen(PORT, () => {
   console.log(`Backend active on server http://localhost:${PORT}`);
