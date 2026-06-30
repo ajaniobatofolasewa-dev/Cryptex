@@ -24,7 +24,11 @@ document
         '<span class="text-slate-400 animate-pulse">Computing cryptographic hash locally...</span>';
 
       try {
-        const res = await fetch("http://localhost:9000/api/verify", {
+
+        const BACKEND_URL =
+            window.env?.BACKEND_URL; /*|| 'http://localhost:5000'*/
+
+        const res = await  fetch(`${BACKEND_URL}/api/verify`, {
           method: "POST",
 
           headers: { "Content-Type": "application/json" },

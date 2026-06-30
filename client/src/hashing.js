@@ -35,7 +35,14 @@ document.getElementById("hash-trigger").addEventListener("click", async () => {
           '<span class="text-slate-400 animate-pulse">Processing...</span>';
 
         try {
-          const res = await fetch("http://localhost:9000/api/hash", {
+          // Fallback to localhost if the Netlify variable doesn't exist yet (for local testing)
+          const BACKEND_URL =
+            window.env?.BACKEND_URL; /*|| 'http://localhost:5000'*/
+
+          // Use the variable in your API calls
+          // fetch(`${BACKEND_URL}/api/your-endpoint`)
+
+          const res = await fetch(`${BACKEND_URL}/api/hash`, {
             method: "POST",
 
             headers: {

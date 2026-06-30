@@ -30,10 +30,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// app.get("/", (req, res) => {
-//   res.send("Server is running");
-// });
-
 const PORT = process.env.PORT || 7700;
 
 app.post("/api/hash", (req, res) => {
@@ -109,6 +105,11 @@ app.post("/api/verify", (req, res) => {
 // app.get('*', (req, res) => {
 //   res.sendFile(path.join(__dirname, '../client', 'index.html'));
 // });
+
+app.all("/", (req, res) => {
+  res.send("endpoint not found");
+  return;
+});
 
 app.listen(PORT, () => {
   console.log(`Backend active on server http://localhost:${PORT}`);
