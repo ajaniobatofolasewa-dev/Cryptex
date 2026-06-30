@@ -1,89 +1,88 @@
-//file picker
-let selectedCipherFile = null;
+// =========================================================================
+// NEW ENCRYPT/DECRYPT FILE PICKER SUBSYSTEM (ISOLATED)
+// =========================================================================
+
+// 1. Isolated Global State & Unique Element Targets
+let selectedCipherFile = null; 
 
 const fileEncryptBox = document.getElementById("view-file-encrypt");
+const fileDecryptBox = document.getElementById("view-file-decrypt");
 const expectedClick = document.getElementById("cipher-hidden-file-input");
 
-fileEncryptBox.addEventListener("click", () => expectedClick.click());
+// Safe array mapping that safely filters out any missing layout elements
+const dropZones = [fileEncryptBox, fileDecryptBox].filter(Boolean);
 
-const fileDecryptBox = document.getElementById("view-file-decrypt");
-fileDecryptBox.addEventListener("click", () => expectedClick.click());
+// 2. Click Routing (Opens native browser finder windows safely)
+if (fileEncryptBox && expectedClick) {
+  fileEncryptBox.addEventListener("click", () => expectedClick.click());
+}
+if (fileDecryptBox && expectedClick) {
+  fileDecryptBox.addEventListener("click", () => expectedClick.click());
+}
 
-// 1. Group your drop zones into a clean, workable array list
-const dz = document.getElementById("view-file-decrypt");
-const ez = document.getElementById("view-file-encrypt");
-const dropZones = [ez, dz]; // Clean list of elements
+// 3. Selection Event Listener for Native Browse Action
+if (expectedClick) {
+  expectedClick.addEventListener("change", (e) => {
+    if (e.target.files.length > 0) {
+      selectedCipherFile = e.target.files[0];
+      handleCipherComponentFileSelection(e.target.files[0]);
+    }
+  });
+}
 
-expectedClick.addEventListener("change", (e) => {
-  if (e.target.files.length > 0) {
-    selectedCipherFile = e.target.files[0];
-    handleFileSelection(e.target.files[0]);
-  }
-});
+// NOTE: Step 3 (Window global drag/drop rules) has been omitted.
+// Your old code already prevents the browser from loading dropped data globally.
 
-// 3. Prevent browser from opening files when dropped onto the window screen layout
-["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
-  window.addEventListener(eventName, (e) => e.preventDefault(), false);
-});
-
-// 4. Loop through the array to add hover styles to BOTH boxes smoothly
+// 4. Smooth Hover Class Swaps (Uses classList to preserve underlying template structures)
 ["dragenter", "dragover"].forEach((eventName) => {
   dropZones.forEach((zone) => {
-    zone.addEventListener(
-      eventName,
-      () => {
-        zone.className =
-          "w-full border-2 border-dashed border-blue-900 rounded-xl p-8 bg-blue-50/50 transition-all flex flex-col items-center justify-center gap-2 cursor-pointer group";
-      },
-      false,
-    );
+    zone.addEventListener(eventName, () => {
+      zone.classList.add("border-blue-900", "bg-blue-50/50");
+      zone.classList.remove("border-slate-300", "bg-white", "hover:bg-slate-50");
+    }, false);
   });
 });
 
-// 5. Restore normal gray border layout styles when drag leaves or drops
+// 5. Restore Normal Grey Visual State Styles on Leave/Drop
 ["dragleave", "drop"].forEach((eventName) => {
   dropZones.forEach((zone) => {
-    zone.addEventListener(
-      eventName,
-      () => {
-        zone.className =
-          "w-full border-2 border-dashed border-slate-300 rounded-xl p-8 bg-white hover:bg-slate-50 hover:border-blue-900 transition-all flex flex-col items-center justify-center gap-2 cursor-pointer group";
-      },
-      false,
-    );
+    zone.addEventListener(eventName, () => {
+      zone.classList.remove("border-blue-900", "bg-blue-50/50");
+      zone.classList.add("border-slate-300", "bg-white", "hover:bg-slate-50");
+    }, false);
   });
 });
 
-// 6. Capture the file dropping action event package data on both zones
+// 6. Capture Visual Action Event Dropped Data Separately On Both Elements
 dropZones.forEach((zone) => {
   zone.addEventListener("drop", (e) => {
     const dfs = e.dataTransfer.files;
     if (dfs.length > 0) {
       selectedCipherFile = dfs[0];
-      handleFileSelection(dfs[0]);
+      handleCipherComponentFileSelection(dfs[0]);
     }
   });
 });
 
-// 7. Update the visual screen strings to show the filename and size
-function handleFileSelection(file) {
-  // Format the file size nicely into Kilobytes or Megabytes
+// 7. Isolated Localized Function to Change String Nodes Safely
+function handleCipherComponentFileSelection(file) {
   const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
-
-  // FIXED: Born in the open air so the whole function can see it!
   let detailsBox;
 
-  if (currentCipherMode === "encrypt") {
+  // Uses local logic variables to safely map UI nodes without collision
+  if (typeof currentCipherMode !== "undefined" && currentCipherMode === "encrypt") {
     detailsBox = document.getElementById("cipher-file-encrypt-details");
   } else {
     detailsBox = document.getElementById("cipher-file-decrypt-details");
   }
 
-  // Display the real filename inside our dash border box
-  detailsBox.innerText = `Selected File: ${file.name} (${sizeInMB} MB)`;
-  detailsBox.className =
-    "text-xs text-blue-950 font-bold text-center bg-blue-100 rounded px-2 py-1 mt-1";
+  if (detailsBox) {
+    detailsBox.innerText = `Selected File: ${file.name} (${sizeInMB} MB)`;
+    detailsBox.className =
+      "text-xs text-blue-950 font-bold text-center bg-blue-100 rounded px-2 py-1 mt-1";
+  }
 }
+
 
 let currentCipherPayload = "file"; // Tracks 'file' or 'text'
 let currentCipherMode = "encrypt"; // Tracks 'encrypt' or 'decrypt'

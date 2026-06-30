@@ -1,5 +1,4 @@
-// Text verification sector
-
+// This is for the file and text verification sector
 document
   .getElementById("verify-trigger")
   .addEventListener("click", async () => {
@@ -12,8 +11,9 @@ document
       // const aglo = ["sha-1", "SHA-1", "sha-256", "SHA-256", "md5", "MD5"];
 
       if (
-        (!vti || !vhs || algorSel === /*aglo.includes(algorSel.trim())*/ "NONE",
-        "none")
+        !vti ||
+        !vhs ||
+        algorSel === /*aglo.includes(algorSel.trim())*/ "NONE"
       ) {
         vso.innerHTML =
           '<span class="text-red-500">Provide a text, a hash signature, and a valid algorithm type.</span>';
@@ -51,20 +51,15 @@ document
       }
       return;
     }
-  });
 
-// This is for the file verification sector
-document
-  .getElementById("verify-trigger")
-  .addEventListener("click", async () => {
     if (currentVerifyMode === "file") {
       const vhs = document.getElementById("verify-hash-signature").value.trim();
       const algorSel = document.getElementById("algorithm-select-s").value;
       const vso = document.getElementById("verify-status-output");
 
-      const algo = ["none", "NONE"];
+      // const algo = ["none", "NONE"];
 
-      if (!selectedFileContainer || !vhs || algorSel === algo.includes) {
+      if (!selectedFileContainer || !vhs || algorSel === "none") {
         vso.innerHTML =
           '<span class="text-red-500">Provide a file, a hash signature, and an algorithm type.</span>';
         return;
