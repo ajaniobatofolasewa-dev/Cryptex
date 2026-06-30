@@ -1,15 +1,18 @@
 const express = require("express");
+require("dotenv").config();
+const crypto = require("crypto");
+const cors = require("cors");
+const { config } = require("dotenv");
 
 const app = express();
+
+app.use(cors());
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
-require("dotenv").config();
-const crypto = require("crypto");
-const cors = require("cors");
-const { config } = require("dotenv");
 
 // const path = require('path');
 
@@ -23,8 +26,6 @@ const { config } = require("dotenv");
 
 const PORT = process.env.PORT || 7700;
 
-app.use(cors());
-app.use(express.json());
 
 app.post("/api/hash", (req, res) => {
   const { text, algorithm } = req.body;
