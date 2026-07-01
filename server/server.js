@@ -29,7 +29,7 @@ const allowedOrigins = [
 
 // app.use(cors(corsOptions));
 app.use(express.json());
-app.use(cors()); // Enable CORS for all routes
+app.use(cors(process.env.FRONTEND_URL_IS)); // Enable CORS for all routes
 
 const PORT = process.env.PORT || 7700;
 
