@@ -1,3 +1,10 @@
+const sidebarTggle = document.getElementById("sidebar-toggle");
+sidebarTggle.addEventListener("click", () => {
+  const sidebar = document.getElementById("sidebar");
+  sidebar.classList.toggle("hidden");
+  sidebar.classList.toggle("block");
+});
+
 // for the cipher button and display
 const navCipherBtn = document.getElementById("nav-cipher");
 const viewCipher = document.getElementById("panel-cipher-workspace");
