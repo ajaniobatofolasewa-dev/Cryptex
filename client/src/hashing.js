@@ -36,13 +36,13 @@ document.getElementById("hash-trigger").addEventListener("click", async () => {
 
         try {
           // Fallback to localhost if the Netlify variable doesn't exist yet (for local testing)
-          const BACKEND_URL =
-            window.env?.BACKEND_URL; /*|| 'http://localhost:5000'*/
+          // const BACKEND_URL =
+          //   window.env?.BACKEND_URL; /*|| 'http://localhost:5000'*/
 
           // Use the variable in your API calls
           // fetch(`${BACKEND_URL}/api/your-endpoint`)
 
-          const res = await fetch(`${BACKEND_URL}/api/hash`, {
+          const res = await fetch(`https://cryptex-c06i.onrender.com/api/hash`, {
             method: "POST",
 
             headers: {

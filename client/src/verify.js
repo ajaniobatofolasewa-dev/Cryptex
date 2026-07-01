@@ -25,10 +25,10 @@ document
 
       try {
 
-        const BACKEND_URL =
-            window.env?.BACKEND_URL; /*|| 'http://localhost:5000'*/
+        // const BACKEND_URL =
+        //   window.env?.BACKEND_URL; /*|| 'http://localhost:5000'*/
 
-        const res = await  fetch(`${BACKEND_URL}/api/verify`, {
+        const res = await  fetch(`https://cryptex-c06i.onrender.com/api/verify`, {
           method: "POST",
 
           headers: { "Content-Type": "application/json" },
