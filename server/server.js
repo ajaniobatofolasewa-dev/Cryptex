@@ -11,24 +11,25 @@ const allowedOrigins = [
   process.env.FRONTEND_URL_IS, // Your live production frontend URL
 ];
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps, curl, or server-to-server)
-    if (!origin) return callback(null, true);
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     // allow requests with no origin (like mobile apps, curl, or server-to-server)
+//     if (!origin) return callback(null, true);
 
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(
-        new Error("Blocked by CORS policy: This origin is not allowed."),
-      );
-    }
-  },
-  optionsSuccessStatus: 200,
-};
+//     if (allowedOrigins.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(
+//         new Error("Blocked by CORS policy: This origin is not allowed."),
+//       );
+//     }
+//   },
+//   optionsSuccessStatus: 200,
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cors()); // Enable CORS for all routes
 
 const PORT = process.env.PORT || 7700;
 

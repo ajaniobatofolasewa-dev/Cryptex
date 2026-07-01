@@ -42,18 +42,21 @@ document.getElementById("hash-trigger").addEventListener("click", async () => {
           // Use the variable in your API calls
           // fetch(`${BACKEND_URL}/api/your-endpoint`)
 
-          const res = await fetch(`https://cryptex-c06i.onrender.com/api/hash`, {
-            method: "POST",
+          const res = await fetch(
+            `https://cryptex-c06i.onrender.com/api/hash`,
+            {
+              method: "POST",
 
-            headers: {
-              "Content-Type": "application/json",
+              headers: {
+                "Content-Type": "application/json",
+              },
+
+              body: JSON.stringify({
+                text: text_input,
+                algorithm: algorithm_select,
+              }),
             },
-
-            body: JSON.stringify({
-              text: text_input,
-              algorithm: algorithm_select,
-            }),
-          });
+          );
 
           const data = await res.json();
 
